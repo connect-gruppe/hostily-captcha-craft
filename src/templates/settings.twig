@@ -1,0 +1,108 @@
+{% import '_includes/forms' as forms %}
+
+<p class="light">{{ 'Protects forms of your site with hostily Captcha (privacy-friendly, no cookies). Enter site key and secret of your project from captcha.hostily.de and add the domain of this site to the allowed domains of the project. Without site key and secret nothing is protected and nothing is blocked.'|t('hostily-captcha') }}</p>
+
+{{ forms.autosuggestField({
+    label: 'Site key'|t('hostily-captcha'),
+    instructions: 'From your project at captcha.hostily.de.'|t('hostily-captcha'),
+    id: 'siteKey',
+    name: 'siteKey',
+    suggestEnvVars: true,
+    value: settings.siteKey,
+    errors: settings.getErrors('siteKey'),
+    autofocus: true,
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'Secret'|t('hostily-captcha'),
+    instructions: 'The secret stays on the server and is never put into a page. Use an environment variable such as {example}.'|t('hostily-captcha', {example: '$HOSTILY_CAPTCHA_SECRET'}),
+    id: 'secret',
+    name: 'secret',
+    suggestEnvVars: true,
+    value: settings.secret,
+    errors: settings.getErrors('secret'),
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'Service URL'|t('hostily-captcha'),
+    instructions: 'Default {url}; an own installation is possible.'|t('hostily-captcha', {url: 'https://captcha.hostily.de'}),
+    id: 'serviceUrl',
+    name: 'serviceUrl',
+    suggestEnvVars: true,
+    value: settings.serviceUrl,
+    errors: settings.getErrors('serviceUrl'),
+}) }}
+
+{{ forms.selectField({
+    label: 'Mode'|t('hostily-captcha'),
+    instructions: 'Visible (checkbox) or invisible (solves when the form is submitted).'|t('hostily-captcha'),
+    id: 'mode',
+    name: 'mode',
+    options: [
+        {value: 'sichtbar', label: 'Visible'|t('hostily-captcha')},
+        {value: 'unsichtbar', label: 'Invisible'|t('hostily-captcha')},
+    ],
+    value: settings.mode,
+}) }}
+
+{{ forms.selectField({
+    label: 'Widget language'|t('hostily-captcha'),
+    instructions: 'Automatic uses the language of the page (German or English, otherwise the widget decides).'|t('hostily-captcha'),
+    id: 'language',
+    name: 'language',
+    options: [
+        {value: 'auto', label: 'Automatic'|t('hostily-captcha')},
+        {value: 'de', label: 'German'|t('hostily-captcha')},
+        {value: 'en', label: 'English'|t('hostily-captcha')},
+    ],
+    value: settings.language,
+}) }}
+
+{{ forms.selectField({
+    label: 'If the service is not reachable'|t('hostily-captcha'),
+    instructions: 'Let visitors through (default) or block. Also applies to a wrong secret. Always written to the log (storage/logs/hostily-captcha-*.log).'|t('hostily-captcha'),
+    id: 'onError',
+    name: 'onError',
+    options: [
+        {value: 'allow', label: 'Let through'|t('hostily-captcha')},
+        {value: 'block', label: 'Block'|t('hostily-captcha')},
+    ],
+    value: settings.onError,
+}) }}
+
+<hr>
+<h2>{{ 'Craft forms on the website'|t('hostily-captcha') }}</h2>
+<p class="light">{{ 'Add {code} to the form template first, otherwise visitors are rejected.'|t('hostily-captcha', {code: '{{ hostilyCaptcha() }}'}) }}</p>
+
+{{ forms.lightswitchField({
+    label: 'Registration'|t('hostily-captcha'),
+    instructions: 'Check the public registration form (users/save-user, only for visitors who are not signed in).'|t('hostily-captcha'),
+    id: 'protectRegistration',
+    name: 'protectRegistration',
+    on: settings.protectRegistration,
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Forgot password'|t('hostily-captcha'),
+    instructions: 'Check users/send-password-reset-email.'|t('hostily-captcha'),
+    id: 'protectPasswordReset',
+    name: 'protectPasswordReset',
+    on: settings.protectPasswordReset,
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Login'|t('hostily-captcha'),
+    instructions: 'Check the login form of the website (users/login). The control panel login is never checked.'|t('hostily-captcha'),
+    id: 'protectLogin',
+    name: 'protectLogin',
+    on: settings.protectLogin,
+}) }}
+
+{{ forms.textareaField({
+    label: 'More actions'|t('hostily-captcha'),
+    instructions: 'Further controller actions of the website that should be checked, one per line (e.g. contact-form/send). Only POST requests are checked.'|t('hostily-captcha'),
+    id: 'protectedActions',
+    name: 'protectedActions',
+    rows: 3,
+    value: settings.protectedActions,
+}) }}
