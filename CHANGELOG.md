@@ -1,5 +1,10 @@
 # Release Notes for hostily Captcha
 
+## 0.1.2 - 2026-10-31
+
+### Changed
+- License file renamed to `LICENSE.txt` as required by the Craft Plugin Store.
+
 ## 0.1.1 - 2026-10-31
 
 ### Added
