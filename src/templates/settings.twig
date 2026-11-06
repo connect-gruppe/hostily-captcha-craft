@@ -35,15 +35,36 @@
 
 {{ forms.selectField({
     label: 'Mode'|t('hostily-captcha'),
-    instructions: 'Visible (checkbox) or invisible (solves when the form is submitted).'|t('hostily-captcha'),
+    instructions: 'Visible (checkbox), invisible (solves when the form is submitted), press and hold, or slider. Press and hold and Slider always also offer the alternative "Confirm with a click". "As in the customer portal" uses the setting of your project at captcha.hostily.de.'|t('hostily-captcha'),
     id: 'mode',
     name: 'mode',
     options: [
+        {value: 'portal', label: 'As in the customer portal'|t('hostily-captcha')},
         {value: 'sichtbar', label: 'Visible'|t('hostily-captcha')},
         {value: 'unsichtbar', label: 'Invisible'|t('hostily-captcha')},
+        {value: 'halten', label: 'Press and hold'|t('hostily-captcha')},
+        {value: 'schieben', label: 'Slider'|t('hostily-captcha')},
     ],
     value: settings.mode,
+    errors: settings.getErrors('mode'),
+    toggle: true,
+    targetPrefix: 'mode-',
 }) }}
+
+<div id="mode-halten" {% if settings.mode != 'halten' %}class="hidden"{% endif %}>
+    {{ forms.textField({
+        label: 'Hold time (ms)'|t('hostily-captcha'),
+        instructions: '800 to 3000 milliseconds, only for Press and hold.'|t('hostily-captcha'),
+        id: 'holdTime',
+        name: 'holdTime',
+        type: 'number',
+        min: 800,
+        max: 3000,
+        step: 100,
+        value: settings.holdTime,
+        errors: settings.getErrors('holdTime'),
+    }) }}
+</div>
 
 {{ forms.selectField({
     label: 'Widget language'|t('hostily-captcha'),

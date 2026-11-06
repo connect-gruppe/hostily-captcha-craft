@@ -22,8 +22,14 @@ class Settings extends Model
     /** Adresse des Dienstes. */
     public string $serviceUrl = self::DEFAULT_URL;
 
-    /** 'sichtbar' (Kaestchen) oder 'unsichtbar' (loest beim Absenden). */
+    /** Erlaubte Modi; 'portal' = Wie im Kundenportal (das Attribut data-modus fehlt). */
+    public const MODES = ['portal', 'sichtbar', 'unsichtbar', 'halten', 'schieben'];
+
+    /** Modus des Widgets, siehe MODES. Ein alter gespeicherter Wert bleibt; neu: 'sichtbar' (Kaestchen). */
     public string $mode = 'sichtbar';
+
+    /** Haltezeit in ms (800 bis 3000), nur fuer den Modus 'halten'. */
+    public int $holdTime = 1500;
 
     /** 'auto' (Sprache der Seite), 'de' oder 'en'. */
     public string $language = 'auto';
@@ -47,7 +53,8 @@ class Settings extends Model
     {
         return [
             [['siteKey', 'secret', 'serviceUrl', 'protectedActions'], 'string'],
-            [['mode'], 'in', 'range' => ['sichtbar', 'unsichtbar']],
+            [['mode'], 'in', 'range' => self::MODES],
+            [['holdTime'], 'integer', 'min' => 800, 'max' => 3000],
             [['language'], 'in', 'range' => ['auto', 'de', 'en']],
             [['onError'], 'in', 'range' => ['allow', 'block']],
             [['protectRegistration', 'protectPasswordReset', 'protectLogin'], 'boolean'],

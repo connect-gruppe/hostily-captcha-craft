@@ -29,12 +29,20 @@ class Widget extends Component
         }
         /** @var Settings $s */
         $s = $plugin->getSettings();
-        $mode = ($options['mode'] ?? $s->mode) === 'unsichtbar' ? 'unsichtbar' : 'sichtbar';
+        // Leerer oder unbekannter (alter) Wert: sichtbar; 'portal' (Wie im Kundenportal): kein Attribut
+        $mode = $options['mode'] ?? $s->mode;
+        $mode = in_array($mode, Settings::MODES, true) ? $mode : 'sichtbar';
         $attrs = [
             'data-site-key' => $s->getSiteKey(),
             'data-api' => $s->getServiceUrl() . '/api/',
-            'data-modus' => $mode,
         ];
+        if ($mode !== 'portal') {
+            $attrs['data-modus'] = $mode;
+        }
+        $hold = (int)($options['holdTime'] ?? $s->holdTime);
+        if ($mode === 'halten' && $hold > 0) {
+            $attrs['data-haltezeit'] = max(800, min(3000, $hold));
+        }
         $lang = $plugin->verifier->language($options['language'] ?? null);
         if ($lang !== '') {
             $attrs['data-sprache'] = $lang;
@@ -60,7 +68,7 @@ class Widget extends Component
     }
 
     /**
-     * Widget-Element (mit Skript beim ersten Aufruf). Optionen: mode, language, script (false = Skript nicht schreiben).
+     * Widget-Element (mit Skript beim ersten Aufruf). Optionen: mode (portal, sichtbar, unsichtbar, halten, schieben), holdTime (ms), language, script (false = Skript nicht schreiben).
      */
     public function render(array $options = []): Markup
     {

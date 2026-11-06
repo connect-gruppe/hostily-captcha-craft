@@ -3,7 +3,7 @@
     "description": "hostily Captcha for Craft CMS: privacy-friendly spam protection (no cookies) for your own forms, Formie, Freeform and the front-end account forms.",
     "type": "craft-plugin",
     "license": "MIT",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "homepage": "https://captcha.hostily.de",
     "keywords": ["craft", "craftcms", "craft-plugin", "captcha", "spam", "hostily", "formie", "freeform"],
     "require": {
